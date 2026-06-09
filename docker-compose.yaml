@@ -1,0 +1,71 @@
+version: "3.9"
+
+services:
+
+  proxy:
+    image: mitmproxy/mitmproxy
+
+    container_name: squid-cache-proxy
+
+    command: >
+      mitmdump
+      --listen-host 0.0.0.0
+      --listen-port 3128
+      -s /addons/mitm_addon.py
+      --ssl-insecure
+
+    ports:
+      - "3128:3128"
+
+    environment:
+      CACHED_DELAY_MS: 5000
+      CACHE_DB: /data/cache.db
+
+    volumes:
+      - ./proxy/mitm_addon.py:/addons/mitm_addon.py
+      - ./proxy/data:/data
+      - mitm_certs:/home/mitmproxy/.mitmproxy
+
+    restart: unless-stopped
+
+    networks:
+      - backend
+
+
+  app:
+    build:
+      context: ./app
+
+    depends_on:
+      - proxy
+
+    ports:
+      - "8080:8080"
+
+    environment:
+      HTTP_PROXY: http://proxy:3128
+      HTTPS_PROXY: http://proxy:3128
+
+      JAVA_TOOL_OPTIONS: >
+        -Dhttp.proxyHost=proxy
+        -Dhttp.proxyPort=3128
+        -Dhttps.proxyHost=proxy
+        -Dhttps.proxyPort=3128
+        -Djavax.net.ssl.trustStore=/tmp/cacerts
+        -Djavax.net.ssl.trustStorePassword=changeit
+
+    volumes:
+      - mitm_certs:/mitm-certs:ro
+      - ./app/docker-entrypoint.sh:/docker-entrypoint.sh:ro
+
+    entrypoint: ["/bin/sh", "/docker-entrypoint.sh"]
+
+    networks:
+      - backend
+
+
+networks:
+  backend:
+
+volumes:
+  mitm_certs:

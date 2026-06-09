@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: cep
+
+brasil-api.url: https://brasilapi.com.br
