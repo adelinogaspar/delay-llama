@@ -5,7 +5,7 @@ services:
   proxy:
     image: mitmproxy/mitmproxy
 
-    container_name: squid-cache-proxy
+    container_name: delaylama-cache-proxy
 
     command: >
       mitmdump

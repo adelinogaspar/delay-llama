@@ -149,6 +149,8 @@
 							<buildArgs>
 								<buildArg>--enable-http</buildArg>
 								<buildArg>--enable-https</buildArg>
+								<buildArg>--enable-all-security-services</buildArg>
+								<buildArg>-H:TrustStore=$JAVA_HOME/lib/security/cacerts</buildArg>
 							</buildArgs>
 						</configuration>
 						<executions>

@@ -1,0 +1,10 @@
+server.port: 8081
+http:
+  proxyHost: localhost
+  proxyPort: 3128
+https:
+  proxyHost: localhost
+  proxyPort: 3128
+javax.net.ssl:
+  trustStore: /tmp/cacerts
+  trustStorePassword: changeit
