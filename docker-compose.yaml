@@ -63,6 +63,50 @@ services:
     networks:
       - backend
 
+  gatling:
+    image: gerritforge/gatling:3.9.5
+    container_name: gatling
+    working_dir: /opt/gatling
+    volumes:
+      # Scala simulations
+      - ./gatling/scripts:/opt/gatling/user-files/simulations:z
+
+      # Optional: custom resources (CSV feeders, etc.)
+      - ./gatling/resources:/opt/gatling/user-files/resources:z
+
+      # Results output
+      - ./gatling/results:/opt/gatling/results:z
+
+      #- ./gatling/conf/gatling.conf:/opt/gatling/conf/gatling.conf:ro
+    
+    entrypoint:
+      - sleep
+
+    command: 
+      - infinity
+
+    networks:
+      - backend    
+
+  # gatling:
+  #   build:
+  #     context: ./gatling
+  #   container_name: gatling
+  #   working_dir: /opt/gatling
+  #   volumes:
+  #     # Mount your scripts folder to the Maven Scala test source directory
+  #     - ./gatling/scripts:/opt/gatling/src/test/scala:z
+
+  #     # If you have resource files (CSV, JSON feeders, etc.)
+  #     - ./gatling/resources:/opt/gatling/src/test/resources:z
+
+  #     # Results output (Maven plugin writes to target/gatling)
+  #     - ./gatling/results:/opt/gatling/target/gatling:z
+
+  #   entrypoint: sleep
+  #   command: infinity
+  #   networks:
+  #     - backend
 
 networks:
   backend:

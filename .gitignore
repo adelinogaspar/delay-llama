@@ -221,3 +221,4 @@ proxy/data/**
 mitmproxy-ca-cert.pem
 app/.idea/
 app/target/
+gatling/results/

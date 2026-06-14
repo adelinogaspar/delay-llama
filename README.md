@@ -96,3 +96,15 @@ start the app in intellij with
 ```
         -Dhttp.proxyHost=localhost -Dhttp.proxyPort=3128 -Dhttps.proxyHost=localhost -Dhttps.proxyPort=3128 -Djavax.net.ssl.trustStore=/tmp/cacerts -Djavax.net.ssl.trustStorePassword=changeit -Djavax.net.debug=ssl,handshake
 ```
+
+
+# gatling
+
+docker exec -i gatling   ./bin/gatling.sh   -s simulations.DelayLlamaSimulationScaleCep1to100Users   
+
+docker exec -i gatling   ./bin/gatling.sh   -s simulations.DelayLlamaSimulationScaleCep1to100Users   -rf /opt/gatling/results   -rd cep-test   -nr
+
+
+docker exec -it gatling \
+  ./bin/gatling.sh \
+  -s simulations.DelayLlamaSimulationScaleCep1to100Users

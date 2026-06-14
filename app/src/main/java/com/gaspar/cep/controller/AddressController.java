@@ -4,6 +4,7 @@ import com.gaspar.cep.client.CepClient;
 import com.gaspar.cep.dto.AddressResponseDto;
 import com.gaspar.cep.mapper.CepClientMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,13 @@ public class AddressController {
 
     @GetMapping("/{cep}")
     public AddressResponseDto getCep(@PathVariable String cep ) {
+        return cepClientMapper.toAddressResponseDto(cepClient.getCep(cep));
+    }
+
+    @GetMapping("/cached/{cep}")
+    @Cacheable(value = "addressCache", key = "#cep", unless = "#result == null")
+    public AddressResponseDto getCachedCep(@PathVariable String cep) {
+        // The method will only be executed when the cache does not contain the key "cep"
         return cepClientMapper.toAddressResponseDto(cepClient.getCep(cep));
     }
 }
