@@ -22,9 +22,9 @@ services:
       CACHE_DB: /data/cache.db
 
     volumes:
-      - ./proxy/mitm_addon.py:/addons/mitm_addon.py
-      - ./proxy/data:/data
-      - mitm_certs:/home/mitmproxy/.mitmproxy
+      - ./proxy/mitm_addon.py:/addons/mitm_addon.py:ro
+      - ./proxy/data:/data:z
+      - mitm_certs:/home/mitmproxy/.mitmproxy:z
 
     restart: unless-stopped
 
@@ -42,6 +42,9 @@ services:
     ports:
       - "8080:8080"
 
+    mem_limit: 300m
+    cpus: 2.0
+
     environment:
       HTTP_PROXY: http://proxy:3128
       HTTPS_PROXY: http://proxy:3128
@@ -53,6 +56,8 @@ services:
         -Dhttps.proxyPort=3128
         -Djavax.net.ssl.trustStore=/tmp/cacerts
         -Djavax.net.ssl.trustStorePassword=changeit
+        -XX:+UseContainerSupport
+        -XX:MaxRAMPercentage=70
 
     volumes:
       - mitm_certs:/mitm-certs:ro
@@ -87,26 +92,6 @@ services:
 
     networks:
       - backend    
-
-  # gatling:
-  #   build:
-  #     context: ./gatling
-  #   container_name: gatling
-  #   working_dir: /opt/gatling
-  #   volumes:
-  #     # Mount your scripts folder to the Maven Scala test source directory
-  #     - ./gatling/scripts:/opt/gatling/src/test/scala:z
-
-  #     # If you have resource files (CSV, JSON feeders, etc.)
-  #     - ./gatling/resources:/opt/gatling/src/test/resources:z
-
-  #     # Results output (Maven plugin writes to target/gatling)
-  #     - ./gatling/results:/opt/gatling/target/gatling:z
-
-  #   entrypoint: sleep
-  #   command: infinity
-  #   networks:
-  #     - backend
 
 networks:
   backend:

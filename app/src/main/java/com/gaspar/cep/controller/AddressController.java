@@ -11,18 +11,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/v1/cep")
+@RequestMapping("/v1")
 @RequiredArgsConstructor
 public class AddressController {
     private final CepClient cepClient;
     private final CepClientMapper cepClientMapper;
 
-    @GetMapping("/{cep}")
+    @GetMapping("/cep/{cep}")
     public AddressResponseDto getCep(@PathVariable String cep ) {
         return cepClientMapper.toAddressResponseDto(cepClient.getCep(cep));
     }
 
-    @GetMapping("/cached/{cep}")
+    @GetMapping("/cached/cep/{cep}")
     @Cacheable(value = "addressCache", key = "#cep", unless = "#result == null")
     public AddressResponseDto getCachedCep(@PathVariable String cep) {
         // The method will only be executed when the cache does not contain the key "cep"

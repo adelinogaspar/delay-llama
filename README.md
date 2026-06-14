@@ -100,11 +100,18 @@ start the app in intellij with
 
 # gatling
 
-docker exec -i gatling   ./bin/gatling.sh   -s simulations.DelayLlamaSimulationScaleCep1to100Users   
-
-docker exec -i gatling   ./bin/gatling.sh   -s simulations.DelayLlamaSimulationScaleCep1to100Users   -rf /opt/gatling/results   -rd cep-test   -nr
-
-
+```bash
 docker exec -it gatling \
   ./bin/gatling.sh \
   -s simulations.DelayLlamaSimulationScaleCep1to100Users
+```
+
+
+# create this environment to fix root files
+
+```bash
+cat > .env <<EOF
+UID=$(id -u)
+GID=$(id -g)
+EOF
+```
