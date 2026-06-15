@@ -217,7 +217,8 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-proxy/data/**
+proxy/data/
+proxy/certs/
 mitmproxy-ca-cert.pem
 app/.idea/
 app/target/

@@ -1,10 +1,9 @@
-version: "3.9"
-
 services:
 
   proxy:
+    # build:
+    #   context: ./proxy
     image: mitmproxy/mitmproxy
-
     container_name: delaylama-cache-proxy
 
     command: >
@@ -18,12 +17,12 @@ services:
       - "3128:3128"
 
     environment:
-      CACHED_DELAY_MS: 500
+      CACHED_DELAY_MS: 5000
       CACHE_DB: /data/cache.db
 
     volumes:
       - ./proxy/mitm_addon.py:/addons/mitm_addon.py:ro
-      - ./proxy/data:/data:z
+      - proxy_data:/data
       - mitm_certs:/home/mitmproxy/.mitmproxy:z
 
     restart: unless-stopped
@@ -101,3 +100,15 @@ networks:
 
 volumes:
   mitm_certs:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./proxy/certs
+
+  proxy_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./proxy/data

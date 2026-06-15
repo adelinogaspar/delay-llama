@@ -1,12 +1,5 @@
-FROM python:3.13-slim
+FROM mitmproxy/mitmproxy
 
-WORKDIR /app
+COPY mitm_addon.py /addons/mitm_addon.py
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-COPY proxy.py .
-
-EXPOSE 3128
-
-CMD ["python", "proxy.py"]
+CMD ["mitmdump", "--listen-host", "0.0.0.0", "--listen-port", "3120", "-s", "/addons/mitm_addon.py", "--ssl-insecure"]
