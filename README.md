@@ -63,39 +63,24 @@ HTTP_PROXY=http://localhost:3128 HTTPS_PROXY=http://localhost:3128 curl -X GET l
 
 # use the proxy with an external app like debuging with intellij
 
+copy your cacerts into proxy folder:
+
 ```bash
- ✘ gaspar@mint-inspiron  [c] (base)  3.13.11  ~  docker exec delaylama-cache-proxy ls -la /home/mitmproxy/.mitmproxy
-total 32
-drwxr-xr-x 2 mitmproxy mitmproxy 4096 Jun 11 20:23 .
-drwx------ 1 mitmproxy mitmproxy 4096 May 12 13:10 ..
--rw-r--r-- 1 mitmproxy mitmproxy 1172 Jun 11 20:23 mitmproxy-ca-cert.cer
--rw-r--r-- 1 mitmproxy mitmproxy 1035 Jun 11 20:23 mitmproxy-ca-cert.p12
--rw-r--r-- 1 mitmproxy mitmproxy 1172 Jun 11 20:23 mitmproxy-ca-cert.pem
--rw------- 1 mitmproxy mitmproxy 2383 Jun 11 20:23 mitmproxy-ca.p12
--rw------- 1 mitmproxy mitmproxy 2847 Jun 11 20:23 mitmproxy-ca.pem
--rw-r--r-- 1 mitmproxy mitmproxy  770 Jun 11 20:23 mitmproxy-dhparam.pem
- gaspar@mint-inspiron  [c] (base)  3.13.11  ~  docker cp \
-  delaylama-cache-proxy:/home/mitmproxy/.mitmproxy/mitmproxy-ca-cert.pem \
-  /tmp/
-Successfully copied 1.17kB (transferred 3.07kB) to /tmp/
- gaspar@mint-inspiron  [c] (base)  3.13.11  ~  cp $JAVA_HOME/lib/security/cacerts /tmp/cacerts^C
- ✘ gaspar@mint-inspiron  [c] (base)  3.13.11  ~  keytool -importcert \
-  -alias mitmproxy \
-  -file /tmp/mitmproxy-ca-cert.pem \
-  -keystore /tmp/cacerts \
-  -storepass changeit \
-  -noprompt
-Certificate was added to keystore
- gaspar@mint-inspiron  [c] (base)  3.13.11  ~  keytool -list \
-  -keystore /tmp/cacerts \
-  -storepass changeit | grep mitmproxy
+cp $JAVA_HOME/lib/security/cacerts ./proxy/certs/truststore.jks
 ```
 
-start the app in intellij with
+start your app with
 
 ```
-        -Dhttp.proxyHost=localhost -Dhttp.proxyPort=3128 -Dhttps.proxyHost=localhost -Dhttps.proxyPort=3128 -Djavax.net.ssl.trustStore=/tmp/cacerts -Djavax.net.ssl.trustStorePassword=changeit -Djavax.net.debug=ssl,handshake
+-Dhttp.proxyHost=localhost
+-Dhttp.proxyPort=3128
+-Dhttps.proxyHost=localhost
+-Dhttps.proxyPort=3128
+-Djavax.net.ssl.trustStore=<absolute_path>/proxy/certs/truststore.jks
+-Djavax.net.ssl.trustStorePassword=changeit
 ```
+
+where `<absolute_path>` is the absolute path to your `jks` file you have copied earlier.
 
 
 # gatling
