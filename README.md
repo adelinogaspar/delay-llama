@@ -66,7 +66,13 @@ HTTP_PROXY=http://localhost:3128 HTTPS_PROXY=http://localhost:3128 curl -X GET l
 copy your cacerts into proxy folder:
 
 ```bash
-cp $JAVA_HOME/lib/security/cacerts ./proxy/certs/truststore.jks
+keytool -importcert \
+  -storetype PKCS12 \
+  -alias mitmproxy \
+  -file proxy/certs/mitmproxy-ca-cert.pem \
+  -keystore proxy/certs/truststore.jks \
+  -storepass changeit \
+  -noprompt
 ```
 
 start your app with
@@ -100,3 +106,12 @@ UID=$(id -u)
 GID=$(id -g)
 EOF
 ```
+
+
+keytool -importcert \
+  -storetype PKCS12 \
+  -alias mitmproxy \
+  -file proxy/certs/mitmproxy-ca-cert.pem \
+  -keystore proxy/certs/truststore.jks \
+  -storepass changeit \
+  -noprompt
